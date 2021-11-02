@@ -1,16 +1,11 @@
-# Use this code snippet in your app.
-# If you need more information about configurations or implementing the sample code, visit the AWS docs:   
-# https://aws.amazon.com/developers/getting-started/python/
-
 import boto3
 import base64
 from botocore.exceptions import ClientError
-import json
 
-# Returns dictionary of our AWS credentials
+
 def get_secret():
 
-    secret_name = "naomi-airbnb-db-sm"
+    secret_name = "arn:aws:secretsmanager:us-east-2:939595455984:secret:naomi-airbnb-db-sm-NT2plR"
     region_name = "us-east-2"
 
     # Create a Secrets Manager client
@@ -57,7 +52,7 @@ def get_secret():
         else:
             decoded_binary_secret = base64.b64decode(get_secret_value_response['SecretBinary'])
             
-    # Your code goes here. 
+    # Your code goes here.  
     if secret:
         secrets = json.loads(secret)
     elif decoded_binary_secret:
