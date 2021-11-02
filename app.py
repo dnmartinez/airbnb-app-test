@@ -1,13 +1,20 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, make_response
 import pymysql
-import os
+import pymysql.cursors
 
-db_username = "admin"
+from secrets_manager import get_secret
+
+"""db_username = "admin"
 db_password = "yokocat22"
 db_name = "listings"
-db_endpoint = "naomi-airbnb-db.chjxclsv9tv3.us-east-2.rds.amazonaws.com"
+db_endpoint = "naomi-airbnb-db.chjxclsv9tv3.us-east-2.rds.amazonaws.com""""
+client = boto3.client('secretsmanager')
+response = client.get_secret_value(
+    SecretId='naomi-airbnb-db-sm'
+)
 app = Flask(__name__)
-#api = Api(app) # wrap our app in an API. Initializes fact that we are using restful api
+db_config = get_secret()
+
 
 @app.route("/")
 def index():
@@ -16,15 +23,15 @@ def index():
 
 @app.route("/affordable", methods=['GET'])
 def affordabe():
-    connection= pymysql.connect(host=db_endpoint, user=db_username, passwd=db_password, db=db_name)
+    connection= pymysql.connect(host=db_config["host"], user=db_config["username"], passwd=db_config["password"], db=db_config["db_name"], cursorclass=pymysql.cursors.DictCursor)
     with connection:
-
         with connection.cursor() as cursor:
             # Read a single record
-            sql = "SELECT * FROM nl_listing WHERE price <= 80"
+            sql = "SELECT * FROM nl_listing WHERE price <= 150 ORDER BY price"
             cursor.execute(sql)
-            result = jsonify(cursor.fetchall())
-    return result
+            result = cursor.fetchall()
+    return make_response(jsonify({'lisnting': result}))
+    #return render_template("affordable.html", data=result)
         
         #return render_template("affordable.html", name=result)
 
