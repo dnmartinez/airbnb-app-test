@@ -9,8 +9,8 @@ services:
     container_name: flask_app
     restart: always
     environment:
-      - AWS_ACCESS_KEY_ID=AKIARX6YGDNJVZXLQKGW
-      - AWS_SECRET_ACCESS_KEY=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
+      - AWS_ACCESS_KEY_ID=AKIA5VRCA3XYC4MBUBW3
+      - AWS_SECRET_ACCESS_KEY=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
 
   db:
     image: mysql:5.6
