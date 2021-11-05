@@ -5,7 +5,9 @@ FROM python:3.8
 EXPOSE 5000
 
 # Sets the working directory for following COPY and CMD instructions
-WORKDIR /app
+WORKDIR  /usr/src/app
+
+#ADD . /app
 
 COPY . .
 
@@ -13,7 +15,4 @@ COPY . .
 RUN pip install -r requirements.txt
 
 # Run app.py when the container launches
-CMD python app.py
-
-
-
+CMD python run.py
