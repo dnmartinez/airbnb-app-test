@@ -6,18 +6,16 @@ import logging
 import pymysql
 import pymysql.cursors
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 db_config = get_secret()
 
-print('DB CONFIG -->', db_config)
 try:
     connection= pymysql.connect(host=db_config["host"], user=db_config["username"], passwd=db_config["password"], db=db_config["dbname"], cursorclass=pymysql.cursors.DictCursor)
-    print("Connection worked!")
+    logger.debug('Connection established')
 except pymysql.MySQLError as e:
-    print("Connection failed")
+    logger.error("Exception occurred", exc_info=True)
 
-print("Connection worked?")
 
 
 """@app.route('/affordable_stays/<amount>')
