@@ -1,21 +1,26 @@
 from app import app 
-from secret_name import get_secret
+from secrets_manager import get_secret
 import sys
 import json
+import logging
 import pymysql
 import pymysql.cursors
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-try:
-    db_config = get_secret()
-    connection= pymysql.connect(host=db_config["host"], user=db_config["username"], passwd=db_config["password"], db=db_config["db_name"], cursorclass=pymysql.cursors.DictCursor)
-except pymysql.MySQLError as e:
-        logger.debug("Connection could not be established  ",e)
-        sys.exit()
-logger.info("SUCCESS: Connection was established")
+db_config = get_secret()
 
-@app.route('/affordable_stays/<amount>')
+print('DB CONFIG -->', db_config)
+try:
+    connection= pymysql.connect(host=db_config["host"], user=db_config["username"], passwd=db_config["password"], db=db_config["dbname"], cursorclass=pymysql.cursors.DictCursor)
+    print("Connection worked!")
+except pymysql.MySQLError as e:
+    print("Connection failed")
+
+print("Connection worked?")
+
+
+"""@app.route('/affordable_stays/<amount>')
 def affordable(amount:int):
     column = 'price'
     with connection:
@@ -65,7 +70,7 @@ def expensive_neighborhoods(name:str, amount:int):
             sql = ''' SELECT * FROM nl_listing WHERE (%s) LIKE (%s) AND (%s) >= (%s) ''' %(neighbourhood, name, price, amount)
             cursor.execute(sql)
             result = cursor.fetchall()
-    return json.dumps(result)
+    return json.dumps(result)"""
 
 @app.route('/')
 def index():
