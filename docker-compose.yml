@@ -8,10 +8,14 @@ services:
       - "5000:5000"
     container_name: flask_app
     restart: always
+    environment:
+      - AWS_ACCESS_KEY_ID=AKIARX6YGDNJVZXLQKGW
+      - AWS_SECRET_ACCESS_KEY=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
 
   db:
     image: mysql:5.6
     ports:
       - "32000:3306"
+    container_name: database_1
     environment:
       MYSQL_ROOT_PASSWORD: "Yokocat22"
